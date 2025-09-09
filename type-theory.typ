@@ -13,6 +13,9 @@ This chapter contains material on type theory.
 
 = Type Theory Basics <section-type-theory-basics>
 == Inference Rules <subsection-inference-rules>
+#definition(title: "Inference Rules", label: "inference-rules")[
+  An inference rule
+]
 //\begin{definition}{Inference Rules}{inference-rules}%
 //    An \index[type-theory]{inference rule}\textbf{inference rule} is written in the form
 //    \begin{webprooftree}%
