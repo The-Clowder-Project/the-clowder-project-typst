@@ -232,7 +232,7 @@
               #text(fill: white)[#sym.space$triangle$]
             ]
           ),
-          block(
+          #block(
             width: 100%,
             fill: backgroundColor,
             inset: 8pt,
@@ -290,7 +290,7 @@
               #text(fill: white)[#sym.space$triangle$]
             ]
           ),
-          block(
+          #block(
             width: 100%,
             fill: backgroundColor,
             inset: 8pt,
@@ -482,6 +482,342 @@ This chapter contains material on type theory.
           $Gamma, x:A, y:B, Delta |- cal(J)$,
         ),
       ),
+    )
+  ).
+]
+
+= Martin-Löf Type Theory <section-martin-löf-type-theory>
+
+== Judgements <subsection-the-judgements-of-martin-löf-type-theory>
+#definition(title: "Judgements in Martin-Löf Type Theory")[
+  Martin-Löf type theory has four kinds of *judgements*:
+  + $A$ is a *type* in context $Gamma$.
+  + $A$ and $B$ are *judgementally equal types* in context $Gamma$.
+  + $a$ is a *term* of type $A$ in context $Gamma$.
+  + Terms $a$ and $b$ of type $A$ are *judgementally equal terms* of type $A$ in context $Gamma$.
+
+  These four judgements are written as follows:
+  - $Gamma |- A "type"$.
+  - $Gamma |- A "\u{2250}" B "type"$.
+  - $Gamma |- a: A$.
+  - $Gamma |- a "\u{2250}" b: A$.
+]
+
+== Formation of Contexts, Types, and Terms <subsection-formation-of-contexts-types-and-terms>
+#definition(title: "Formation of Contexts, Types, and Terms in Martin-Löf Type Theory")[
+  Martin-Löf type theory has the following inference rules about the formation of contexts, types, and terms.
+  + *Formation of Dependent Types.* We have
+    #prooftree(
+      rule(
+        $Gamma |- A "type"$,
+        $Gamma, x: A |- B(x) "type"$,
+      )
+    ).
+  + *Formation of Judgemental Equality of Types I.* We have
+    #prooftree(
+      rule(
+        $Gamma |- A "type"$,
+        $Gamma |- A "\u{2250}" B "type"$,
+      )
+    ).
+  + *Formation of Judgemental Equality of Types II.* We have
+    #prooftree(
+      rule(
+        $Gamma |- B "type"$,
+        $Gamma |- A "\u{2250}" B "type"$,
+      )
+    ).
+  + *Formation of Terms.* We have
+    #prooftree(
+      rule(
+        $Gamma |- A "type"$,
+        $Gamma |- a: A$,
+      )
+    ).
+  + *Formation of Judgemental Equality of Terms I.* We have
+    #prooftree(
+      rule(
+        $Gamma |- a: A$,
+        $Gamma |- a "\u{2250}" b: A$,
+      )
+    ).
+  + *Formation of Judgemental Equality of Terms II.* We have
+    #prooftree(
+      rule(
+        $Gamma |- b: A$,
+        $Gamma |- a "\u{2250}" b: A$,
+      )
+    ).
+]
+
+== Judgemental Equality <subsection-judgemental-equality-in-martin-löf-type-theory>
+#definition(title: "Judgemental Equality in Martin-Löf Type Theory II")[
+  Martin-Löf type theory has the following inference rules about judgemental equality of types, ensuring it behaves like an equivalence relation.
+  + *Reflexivity.* We have
+    #prooftree(
+      rule(
+        name: "refl",
+        $Gamma |- A "\u{2250}" A "type"$,
+        $Gamma |- A "type"$,
+      )
+    ).
+  + *Symmetry.* We have
+    #prooftree(
+      rule(
+        name: "symm",
+        $Gamma |- B "\u{2250}" A "type"$,
+        $Gamma |- A "\u{2250}" B "type"$,
+      )
+    ).
+  + *Transitivity.* We have
+    #prooftree(
+      rule(
+        name: "trans",
+        $Gamma |- A "\u{2250}" C "type"$,
+        $Gamma |- A "\u{2250}" B "type"$,
+        $Gamma |- B "\u{2250}" C "type"$,
+      )
+    ).
+]
+
+#definition(title: "Inference Rules in Martin-Löf Type Theory III")[
+  Martin-Löf type theory has the following inference rules about judgemental equality of terms, ensuring it behaves like an equivalence relation.
+  + *Reflexivity.* We have
+    #prooftree(
+      rule(
+        name: "refl",
+        $Gamma |- a "\u{2250}" a: A$,
+        $Gamma |- a: A$,
+      )
+    ).
+  + *Symmetry.* We have
+    #prooftree(
+      rule(
+        name: "symm",
+        $Gamma |- b "\u{2250}" a: A$,
+        $Gamma |- a "\u{2250}" b: A$,
+      )
+    ).
+  + *Transitivity.* We have
+    #prooftree(
+      rule(
+        name: "trans",
+        $Gamma |- a "\u{2250}" c: A$,
+        $Gamma |- a "\u{2250}" b: A$,
+        $Gamma |- b "\u{2250}" c: A$,
+      )
+    ).
+]
+
+<more-variable-conversion-rules-for-martin-löf-type-theory>#proposition(title: "More Variable Conversion Rules for Martin-Löf Type Theory")[
+  Martin-Löf type theory has the following additional variable conversion rules:
+  + *Converting Terms.* We have
+    #prooftree(
+      rule(
+        name: "CT",
+        $Gamma |- a: B$,
+        $Gamma |- a: A$,
+        $Gamma |- A "\u{2250}" B "type"$,
+      )
+    ).
+  + *Converting Judgemental Equality for Terms.* We have
+    #prooftree(
+      rule(
+        name: "CJET",
+        $Gamma |- a "\u{2250}" b: B$,
+        $Gamma |- a "\u{2250}" b: A$,
+        $Gamma |- A "\u{2250}" B "type"$,
+      )
+    ).
+]
+
+#proof(title: [Proof of @more-variable-conversion-rules-for-martin-löf-type-theory])[
+  *Converting Terms:*
+  We have
+  #prooftree(
+    rule(
+      $Gamma |- a: B$,
+      rule(
+        name: "VC",
+        $Gamma, x: A |- x: B$,
+        rule(
+          name: "G",
+          $Gamma, x: B |- x: B$,
+          rule(
+            $Gamma |- B "type"$,
+            $Gamma |- A "\u{2250}" B "type"$,
+          ),
+        ),
+        rule(
+          name: "symm",
+          $Gamma |- B "\u{2250}" A "type"$,
+          $Gamma |- A "\u{2250}" B "type"$,
+        ),
+      ),
+      $Gamma |- a: A$,
+    )
+  ).
+  This finishes the proof.
+
+  *Converting Judgemental Equality for Terms:*
+  We have
+  #prooftree(
+    rule(
+      $Gamma |- a "\u{2250}" b: B$,
+      rule(
+        name: "CS2",
+        $Gamma |- x[a/x] "\u{2250}" x[b/x]: B[a/x]$,
+        rule(
+          name: "VC",
+          $Gamma, x: A |- x: B$,
+          rule(
+            name: "G",
+            $Gamma, x: B |- x: B$,
+            rule(
+              $Gamma |- B "type"$,
+              $Gamma |- A "\u{2250}" B "type"$,
+            ),
+          ),
+          rule(
+            name: "symm",
+            $Gamma |- B "\u{2250}" A "type"$,
+            $Gamma |- A "\u{2250}" B "type"$,
+          ),
+        ),
+        $Gamma |- a "\u{2250}" b: A$,
+      )
+    )
+  ),
+  where we have used a reference (CS2) from below.
+]
+
+== Substitution <subsection-substitution-in-martin-löf-type-theory>
+#definition(title: "Substitution in Martin-Löf Type Theory")[
+  Martin-Löf type theory has the following inference rules about *substitution*:
+  #footnote[*Further Terminology and Notation:* The type $B[a/x]$ is the *fibre* of $B$ at $a$, and is also written $B(a)$.]
+  #footnote[*Further Terminology and Notation:* The term $b[a/x]$ is the *value* of $b(x)$ at $a$, and is also written $b(a)$.]
+  + *Substitution in Types.* We have
+    #prooftree(
+      rule(
+        $Gamma, Delta[a/x] |- B[a/x] "type"$,
+        $Gamma |- a: A$,
+        $Gamma, x: A, Delta |- B(x) "type"$,
+      )
+    ).
+  + *Substitution in Terms.* We have
+    #prooftree(
+      rule(
+        $Gamma, Delta[a/x] |- b[a/x]: B[a/x]$,
+        $Gamma |- a: A$,
+        $Gamma, x: A, Delta |- b(x): B(x)$,
+      )
+    ).
+  + *Substitution in Judgemental Equality of Types.* We have
+    #prooftree(
+      rule(
+        $Gamma, Delta[a/x] |- B[a/x] "\u{2250}" C[a/x] "type"$,
+        $Gamma |- a: A$,
+        $Gamma, x: A, Delta |- B(x) "\u{2250}" C(x) "type"$,
+      )
+    ).
+  + *Substitution in Judgemental Equality of Terms.* We have
+    #prooftree(
+      rule(
+        $Gamma, Delta[a/x] |- b[a/x] "\u{2250}" b'[a/x]: B[a/x]$,
+        $Gamma |- a: A$,
+        $Gamma, x: A, Delta |- b(x) "\u{2250}" b'(x): B(x)$,
+      )
+    ).
+
+  These rules may be summarised as
+  #prooftree(
+    rule(
+      $Gamma, Delta[a/x] |- cal(J)[a/x]$,
+      $Gamma |- a: A$,
+      $Gamma, x: A, Delta |- cal(J)$,
+    )
+  )
+  for $cal(J)$ a generic judgement.
+]
+
+#definition(title: "Inference Rules in Martin-Löf Type Theory VI")[
+  Martin-Löf type theory has the following additional "congruence" rules about *substitution*:
+  + *Substitution by Judgementally Equal Terms I: Types.* We have
+    #prooftree(
+      rule(
+        name: "CS1",
+        $Gamma, Delta[a/x] |- C[a/x] "\u{2250}" C[b/x] "type"$,
+        $Gamma |- a "\u{2250}" b: A$,
+        $Gamma, x: A, Delta |- C(x) "type"$,
+      )
+    ).
+  + *Substitution by Judgementally Equal Terms II: Terms.* We have
+    #prooftree(
+      rule(
+        name: "CS2",
+        $Gamma, Delta[a/x] |- c[a/x] "\u{2250}" c[b/x]: C[a/x]$,
+        $Gamma |- a "\u{2250}" b: A$,
+        $Gamma, x: A, Delta |- c(x): C(x)$,
+      )
+    ).
+]
+
+== Weakening <subsection-weakening-in-martin-löf-type-theory>
+#definition(title: "Weakening in Martin-Löf Type Theory VII")[
+  Martin-Löf type theory has the following rules about _weakening_:
+  #footnote[*Further Terminology:* The type $B$ in context $Gamma, x: A$ is called the *constant family $B$* or the *trivial family $B$*.]
+  + *Weakening for Types.* We have
+    #prooftree(
+      rule(
+        $Gamma, a: A |- B(x) "type"$,
+        $Gamma |- A "type"$,
+        $Gamma |- B(x) "type"$,
+      )
+    ).
+  + *Weakening for Terms.* We have
+    #prooftree(
+      rule(
+        $Gamma, a: A |- b(x): B(x)$,
+        $Gamma |- A "type"$,
+        $Gamma |- b(x): B(x)$,
+      )
+    ).
+  + *Weakening for Judgemental Equality of Types.* We have
+    #prooftree(
+      rule(
+        $Gamma, a: A |- B(x) "\u{2250}" C(x) "type"$,
+        $Gamma |- A "type"$,
+        $Gamma |- B(x) "\u{2250}" C(x) "type"$,
+      )
+    ).
+  + *Weakening for Judgemental Equality of Terms.* We have
+    #prooftree(
+      rule(
+        $Gamma, a: A |- b(x) "\u{2250}" b'(x): B(x)$,
+        $Gamma |- A "type"$,
+        $Gamma |- b(x) "\u{2250}" b'(x): B(x)$,
+      )
+    ).
+
+  These rules may be summarised as
+  #prooftree(
+    rule(
+      $Gamma, a: A, Delta |- cal(J)$,
+      $Gamma |- A "type"$,
+      $Gamma |- cal(J)$,
+    )
+  )
+  for $cal(J)$ a generic judgement.
+]
+
+== Generic Elements <subsection-generic-elements-in-martin-löf-type-theory>
+#definition(title: "Generic Elements in Martin-Löf Type Theory")[
+  Martin-Löf type theory has the following *variable rule* about the *generic element*:
+  #prooftree(
+    rule(
+      name: "G",
+      $Gamma, x: A |- x: A$,
+      $Gamma |- A "type"$,
     )
   ).
 ]
