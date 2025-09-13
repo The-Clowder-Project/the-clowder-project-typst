@@ -2,6 +2,10 @@
 #let author = [The Clowder Project Authors]
 #let date = datetime.today()
 
+#set page(margin: 4.25cm)
+#set par(leading: 0.55em, spacing: 0.55em, first-line-indent: 1.8em, justify: true)
+#show heading: set block(above: 1.4em, below: 1em)
+
 #import "@preview/theorion:0.4.0": *
 #import "@preview/curryst:0.5.1": rule, prooftree
 #show: show-theorion
